@@ -4,7 +4,7 @@
         <title>Canvas</title>
         <link rel="icon" type="image/icon" href="Fav/Pages.png">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Round">
         <style type="text/css">
         @font-face {
             font-family: 'Varela Round';
@@ -186,18 +186,80 @@
                 text-decoration: none;
                 transition-duration: 0.4s;
             }
-            #reset:active {
+            #reset:active{
                 transform:scale(1.05);
                 background:#ffffff60;
                 border:2px solid #ffffffad;
                 text-decoration: none;
                 transition-duration: 0s;
             }
+            .switch {
+                position: relative;
+                display: inline-block;
+                width: 39px;
+                height: 15px;
+                opacity: 0.7;
+                transition: opacity 0.2s;
+            }
+            .switch input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+            .slider {
+                position: absolute;
+                cursor: pointer;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                margin-left: 1px;
+                margin-right: -1px;
+                margin-top: 1px;
+                margin-bottom: -1px;
+                background-color: #ffffffbd;
+                -webkit-transition: .4s;
+                transition: .4s;
+            }
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 23px;
+                width: 23px;
+                left: -0.4px;
+                bottom: 0px;
+                top: -3.5px;
+                background-color: #00b3ff;
+                -webkit-transition: .4s;
+                transition: .4s;
+            }
+            .switch:hover{
+                opacity: 1;
+                transition: opacity 0.2s;
+            }
+            input:checked + .slider {
+                background-color: #3d3d3dde;
+            }
+            input:focus + .slider {
+                box-shadow: 0 0 1px #008cffde;
+            }
+            input:checked + .slider:before {
+                -webkit-transform: translateX(17.6px);
+                -ms-transform: translateX(17.6px);
+                transform: translateX(17.6px);
+            }
+            .slider.round {
+                border-radius: 34px;
+            }
+            .slider.round:before {
+                border-radius: 50%;
+            }
         </style>
         <script language="javascript">
-            var canvas,ctx,color="#ffffff",opa=0.3;
+            var canvas,ctx,color="#ffffff",opa=0.3,col="#000000";
             function load() {
-                canvas=document.querySelector("#can");
+            var check=document.getElementById("ran5");
+            canvas=document.querySelector("#can");
             ctx=canvas.getContext("2d");
             canvas.height=500;
             canvas.width=907.9;
@@ -229,15 +291,34 @@
                 
             }
             ran3.addEventListener("input",function(){
-                var col
+                if(check.checked!=true){
                 console.log(col=ran3.value);
                 console.log(ctx.strokeStyle=col);
+                }
             });
             ran1.addEventListener("input",function () {
                 var Size;
                 Size = ran1.value;
                 ctx.lineWidth = Size;
-                two.innerHTML=Size;
+                two.innerHTML=Math.round(Size);
+            });
+            ran5.addEventListener("change",function () {
+                if(check.checked==true){
+                    var Size = Number(ran1.value);
+                    if(Size==1||Size==2)
+                    Size+=0.5;
+                    ctx.lineWidth = Size;
+                    ctx.globalCompositeOperation="destination-out";
+                    ctx.stroke();
+                    }
+                if(check.checked!=true){
+                    var Size = ran1.value;
+                    ctx.lineWidth = Size;
+                    console.log(col=ran3.value);
+                    console.log(ctx.strokeStyle=col);
+                    ctx.globalCompositeOperation="source-over";
+                    ctx.stroke();
+                    }  
             });
             ran4.addEventListener("input",function () {
                 opa=ran2.value;
@@ -298,12 +379,13 @@
             }
         </script>
     </head>
-    <body  onload="load()"> 
+    <body onload="load()"> 
         <center>
             <h1 class="head">Canvas</h1>
             <div style="text-align: center;">
-                <span class="pad"><label class="label">Size</label><input type="range" min="1" class="range" max="10" value="1" step="1" id="ran1"><label class="label" id="two">1</label></span>
+                <span class="pad"><label class="label">Size</label><input type="range" min="1" class="range" max="15" value="1" step="1" id="ran1"><label class="label" id="two">1</label></span>
                 <span class="pad"><label class="label">Opacity</label><input type="range" min="0" class="range" max="100" value="30" step="1" id="ran2"><label class="label" id="one">0.3</label></span>
+                <span class="pad"><label class="label" style="padding-right: 10px;">Eraser</label><label class="switch"><input type="checkbox" id="ran5"><span class="slider round"></span></label></span>
                 <span class="pad"><label class="label" style="padding-right: 10px;">Pen Color</label><input type="color" value="#000000" id="ran3"></span>
                 <span class="pad"><label class="label" style="padding-right: 10px;">Canvas Color</label><input type="color" value="#ffffff" id="ran4"></span>
             </div>
@@ -311,8 +393,8 @@
                 <canvas id="can"></canvas>
                 <table style="margin-top: 10px;" align="center" cellspacing="10" cellpadding="10">
                 <tr>
-                    <th><label class="label l1" style="font-size: 20px;"><i class="material-icons" style="font-size: 23px; vertical-align: -4px;">exit_to_app</i> Action :&emsp;&hairsp; </label><a id="link"><button id="down">Download</button></a></th><th><button id="reset">Clear Pad</button></th>
-                    <th><span id="icons"><label class="label l1" style="font-size: 20px;"><i class="material-icons" style="font-size: 23px; vertical-align: -4px;">share</i> Share :&nbsp; </label><a href="#" id="what" target="_blank" class="common"><i class="fa fa-whatsapp"></i></a><a href="#" id="twit" target="_blank" class="common"><i class="fa fa-twitter"></i></a><a href="#" id="face" target="_blank" class="common"><i class="fa fa-facebook"></i></a></span></th>
+                    <th><label class="label l1" style="font-size: 20px;"><i class="material-icons-round" style="font-size: 23px; vertical-align: -4px;">exit_to_app</i> Action :&emsp;&hairsp; </label><a id="link"><button id="down">Download</button></a></th><th><button id="reset">Clear Pad</button></th>
+                    <th><span id="icons"><label class="label l1" style="font-size: 20px;"><i class="material-icons-round" style="font-size: 23px; vertical-align: -4px;">share</i> Share :&nbsp; </label><a href="#" id="what" target="_blank" class="common"><i class="fa fa-whatsapp"></i></a><a href="#" id="twit" target="_blank" class="common"><i class="fa fa-twitter"></i></a><a href="#" id="face" target="_blank" class="common"><i class="fa fa-facebook"></i></a></span></th>
                 </tr>
             </table>
             </div>
